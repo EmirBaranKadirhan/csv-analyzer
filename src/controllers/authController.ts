@@ -3,6 +3,7 @@ import User from "../models/User"
 import bcrypt from "bcrypt"
 import jwt from "jsonwebtoken"
 
+
 interface RegisterBody {
     email: string
     password: string
@@ -35,12 +36,18 @@ const authRegister = async (
             password: hashedPassword
         })
 
+        const jwtSecretKey = process.env.JWT_SECRET
+
+        if (!jwtSecretKey) {
+            throw new Error("JWT_SECRET tanımlı değil")
+        }
+
         const token = jwt.sign(
-            { email },
-            process.env.JWT_SECRET,
+            { id: newUser._id },
+            jwtSecretKey,
             { expiresIn: '1h' });
 
-        res.status(201).json({ message: "Kayıt başarıyla tamamlandı." });
+        res.status(201).json({ message: "Kayıt başarıyla tamamlandı.", token });
     } catch (error) {
         console.log(error)
         return res.status(500).json({
