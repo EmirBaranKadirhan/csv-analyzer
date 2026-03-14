@@ -18,10 +18,12 @@ const authMiddleware = (req: Request, res: Response, next: NextFunction) => {   
         throw new Error("JWT_SECRET tanımlı değil")
     }
 
-    const verified = jwt.verify(token, jwtSecretKey);
-
-    if (verified) {
+    try {
+        const verified = jwt.verify(token, jwtSecretKey) as { id: string }; // as { id: string } ==> yazmazsak asagidaki verified.id hata verir!
+        req.userId = verified.id
         next()
+    } catch (error) {
+        return res.status(401).json({ message: "Token geçersiz veya süresi dolmuş" })
     }
 
 }

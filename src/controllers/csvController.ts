@@ -1,6 +1,7 @@
 import { Request, Response } from "express"
 import { parse } from "csv-parse/sync"
 import fs from "fs"
+import Analysis from "../models/Analysis"
 
 
 export const uploadCSV = async (req: Request, res: Response) => {
@@ -20,6 +21,14 @@ export const uploadCSV = async (req: Request, res: Response) => {
             }
             const recordsLength = records.length
             const columns = Object.keys(records[0])
+
+            await Analysis.create({
+                user: req.userId,
+                fileName: req.file.originalname,   // kullanıcının yüklediği dosyanın gerçek ismi
+                lineCount: recordsLength,
+                columnName: columns
+            })
+
             return res.status(200).json({ recordsLength, columns })
 
         } else {
