@@ -2,6 +2,7 @@ import express from 'express'
 import dotenv from "dotenv";
 import { connectDB } from "./config/db"
 import authRoutes from "./routes/authRoutes"
+import csvRoutes from "./routes/csvRoutes"
 
 dotenv.config()
 const app = express();
@@ -10,7 +11,7 @@ connectDB();
 
 
 app.use('/api/auth', authRoutes);
-
+app.use('/api/csv', csvRoutes);
 
 // .env'den her sey string olarak gelir !!
 app.listen(Number(process.env.PORT), () => {
