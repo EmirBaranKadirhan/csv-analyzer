@@ -6,8 +6,9 @@ interface IAnalysis {
 
     user: mongoose.Types.ObjectId
     fileName: string
-    lineCount: number
+    rowCount: number
     columnName: string[]        // birden fazla sutun olacak
+    aiComment: string
     createdAt?: Date
     updatedAt?: Date
 
@@ -24,16 +25,19 @@ const analysisSchema = new Schema<IAnalysis>({
         type: String,
         required: true
     },
-    lineCount: {
+    rowCount: {
         type: Number,
         required: true
     },
     columnName: {
         type: [String]
+    },
+    aiComment: {
+        type: String
     }
 
 }, { timestamps: true })
 
 
-const Analysis = model<IUser>('Analysis', analysisSchema);
+const Analysis = model<IAnalysis>('Analysis', analysisSchema);
 export default Analysis;

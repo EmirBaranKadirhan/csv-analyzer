@@ -2,6 +2,7 @@ import { Request, Response } from "express"
 import { parse } from "csv-parse/sync"
 import fs from "fs"
 import Analysis from "../models/Analysis"
+import { analyzeWithAI } from "../services/groqService"
 
 
 export const uploadCSV = async (req: Request, res: Response) => {
@@ -22,14 +23,17 @@ export const uploadCSV = async (req: Request, res: Response) => {
             const recordsLength = records.length
             const columns = Object.keys(records[0])
 
+            const aiComment = await analyzeWithAI(recordsLength, columns)
+
             await Analysis.create({
                 user: req.userId,
                 fileName: req.file.originalname,   // kullanıcının yüklediği dosyanın gerçek ismi
-                lineCount: recordsLength,
-                columnName: columns
+                rowCount: recordsLength,
+                columnName: columns,
+                aiComment: aiComment
             })
 
-            return res.status(200).json({ recordsLength, columns })
+            return res.status(200).json({ recordsLength, columns, aiComment })
 
         } else {
             res.status(400).json({ message: "Hata" })
