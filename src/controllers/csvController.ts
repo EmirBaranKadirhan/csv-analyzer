@@ -42,3 +42,21 @@ export const uploadCSV = async (req: Request, res: Response) => {
     }
 
 }
+
+
+export const getHistory = async (req: Request, res: Response) => {
+
+    try {
+        if (req.userId) {
+            const data = await Analysis.find({ user: req.userId })
+
+            return res.status(200).json({ message: "Gecmis kayitlar basariyla getirildi", data })
+        }
+        return res.status(400).json({ message: "Giris yapilmadi" })
+
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({ message: "Server hatasi" })
+    }
+
+}
