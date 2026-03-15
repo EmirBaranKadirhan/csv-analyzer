@@ -7,19 +7,18 @@ export const analyzeWithAI = async (rowCount: number, columns: string[]) => {
     const chatCompletion = await groq.chat.completions.create({
         messages: [{
             role: "user",
-            content: `You are an expert data analyst. Analyze the following CSV file summary and provide insights in Turkish.
-            CSV Details:
-            - Total rows: ${rowCount}
-            - Columns: ${columns.join(", ")}
+            content: `You are an expert data analyst. Respond ONLY in Turkish. Do not use any other language.
 
-            Please provide:
-            1. What type of data this might be
-            2. Potential use cases for this dataset
-            3. Any observations about the structure
+                Analyze the following CSV file summary:
+                - Total rows: ${rowCount}
+                - Columns: ${columns.join(", ")}
 
-            Keep the response concise and practical.`}],
+                Provide a brief analysis in Turkish:
+                1. What type of data this might be
+                2. Potential use cases
+                3. Observations about the structure`}],
 
-        model: "llama-3.3-70b-versatile"
+        model: "llama-3.1-8b-instant"
     })
 
     const text = chatCompletion.choices[0]?.message?.content || ""
