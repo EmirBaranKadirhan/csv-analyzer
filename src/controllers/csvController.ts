@@ -33,6 +33,8 @@ export const uploadCSV = async (req: Request, res: Response) => {
                 aiComment: aiComment
             })
 
+            fs.unlinkSync(req.file.path)    // csv dosyasini isledikten sonra silmek icin
+
             return res.status(200).json({ recordsLength, columns, aiComment })
 
         } else {
