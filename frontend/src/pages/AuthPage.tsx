@@ -20,7 +20,10 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { useState } from "react"
 
+import { useNavigate } from "react-router";
+
 import { loginUser, registerUser } from "@/services/api"
+
 
 export default function AuthPage() {
 
@@ -28,6 +31,7 @@ export default function AuthPage() {
     const [password, setPassword] = useState('');
     const [token, setToken] = useState('');
 
+    const navigate = useNavigate();
 
     const handleLogin = async () => {
 
@@ -36,6 +40,7 @@ export default function AuthPage() {
         const { token } = response.data
         setToken(token)
         localStorage.setItem('token', token)    // sayfa yenilendiginde gitmesin 
+        navigate('/dashboard')
     }
 
 

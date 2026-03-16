@@ -1,11 +1,12 @@
 import AuthPage from "./pages/AuthPage"
+import { Routes, Route } from 'react-router-dom';
 
 function App() {
   return (
     <div className="min-h-screen flex items-center justify-center">
-
-
-      <AuthPage />
+      <Routes>
+        <Route path="/" element={<AuthPage />} />
+      </Routes>
     </div>
   )
 }
