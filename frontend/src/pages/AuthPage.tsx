@@ -20,7 +20,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { useState } from "react"
 
-import { loginUser } from "@/services/api"
+import { loginUser, registerUser } from "@/services/api"
 
 export default function AuthPage() {
 
@@ -36,6 +36,17 @@ export default function AuthPage() {
         const { token } = response.data
         setToken(token)
         localStorage.setItem('token', token)    // sayfa yenilendiginde gitmesin 
+    }
+
+
+    const handleRegister = async () => {
+
+        const response = await registerUser(email, password)
+        console.log(response)
+        const { token } = response.data
+        setToken(token)
+        localStorage.setItem('token', token)
+
     }
 
     return (
@@ -139,7 +150,7 @@ export default function AuthPage() {
                             </form>
                         </CardContent>
                         <CardFooter className="flex-col gap-2">
-                            <Button type="submit" className="w-full">
+                            <Button type="submit" className="w-full" onClick={() => handleRegister()}>
                                 Create Account
                             </Button>
                             {/* <Button variant="outline" className="w-full">
