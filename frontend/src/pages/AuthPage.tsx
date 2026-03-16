@@ -20,15 +20,23 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { useState } from "react"
 
-
-
-
+import { loginUser } from "@/services/api"
 
 export default function AuthPage() {
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [token, setToken] = useState('');
+
+
+    const handleLogin = async () => {
+
+        const response = await loginUser(email, password)
+        console.log(response)
+        const { token } = response.data
+        setToken(token)
+        localStorage.setItem('token', token)    // sayfa yenilendiginde gitmesin 
+    }
 
     return (
 
@@ -78,7 +86,7 @@ export default function AuthPage() {
                             </form>
                         </CardContent>
                         <CardFooter className="flex-col gap-2">
-                            <Button type="submit" className="w-full">
+                            <Button type="submit" className="w-full" onClick={() => handleLogin()}>
                                 Login
                             </Button>
                             {/* <Button variant="outline" className="w-full">
@@ -141,7 +149,7 @@ export default function AuthPage() {
                     </Card>
                 </TabsContent>
             </Tabs>
-        </div>
+        </div >
 
     )
 }
