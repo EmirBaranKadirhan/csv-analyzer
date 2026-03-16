@@ -1,6 +1,8 @@
 import AuthPage from "./pages/AuthPage"
 import { Routes, Route } from 'react-router-dom';
 import Dashboard from "./pages/Dashboard";
+import { Field, FieldDescription, FieldLabel } from "@/components/ui/field"
+import { Input } from "@/components/ui/input"
 
 function App() {
   return (

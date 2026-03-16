@@ -21,4 +21,18 @@ export const registerUser = async (email: string, password: string) => {
 
 };
 
+export const uploadCSV = async (file: File) => {
+    const token = localStorage.getItem("token")
+
+    const formData = new FormData()
+    formData.append('file', file)   // 'file' ==> backend 'file' etiketli icerigi bekliyor, upload.single('file')
+    const response = await api.post('/csv/upload', formData, {
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    })
+
+    return response
+}
+
 export default api;
