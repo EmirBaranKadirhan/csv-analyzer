@@ -18,8 +18,18 @@ import {
 
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { useState } from "react"
+
+
+
+
 
 export default function AuthPage() {
+
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [token, setToken] = useState('');
+
     return (
 
         <div>
@@ -49,6 +59,7 @@ export default function AuthPage() {
                                             type="email"
                                             placeholder="m@example.com"
                                             required
+                                            onChange={(e) => setEmail(e.target.value)}
                                         />
                                     </div>
                                     <div className="grid gap-2">
@@ -61,7 +72,7 @@ export default function AuthPage() {
                                                 Forgot your password?
                                             </a> */}
                                         </div>
-                                        <Input id="password" type="password" required placeholder="**********" />
+                                        <Input id="password" type="password" required placeholder="**********" onChange={(e) => setPassword(e.target.value)} />
                                     </div>
                                 </div>
                             </form>
@@ -107,13 +118,14 @@ export default function AuthPage() {
                                             type="email"
                                             placeholder="m@example.com"
                                             required
+                                            onChange={(e) => setEmail(e.target.value)}
                                         />
                                     </div>
                                     <div className="grid gap-2">
                                         <div className="flex items-center">
                                             <Label htmlFor="password">Password</Label>
                                         </div>
-                                        <Input id="password" type="password" required placeholder="**********" />
+                                        <Input id="password" type="password" required placeholder="**********" onChange={(e) => setPassword(e.target.value)} />
                                     </div>
                                 </div>
                             </form>
