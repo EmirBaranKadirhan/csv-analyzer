@@ -15,7 +15,7 @@ export default function Dashboard() {
         if (!file) return
         const result = await uploadCSV(file)
         console.log(result)
-        setResult(result)
+        setResult(result.data)
     }
 
     return (
@@ -30,6 +30,15 @@ export default function Dashboard() {
                 </Button>
 
             </Field>
+            <div>
+                {result && (
+                    <div>
+                        <p>Satir : {result.recordsLength}</p>
+                        <p>Satir : {result.columns}</p>
+                        <p>Satir : {result.aiComment}</p>
+                    </div>
+                )}
+            </div>
         </div>
     )
 }
