@@ -1,8 +1,8 @@
 import AuthPage from "./pages/AuthPage"
 import { Routes, Route } from 'react-router-dom';
 import Dashboard from "./pages/Dashboard";
-import { Field, FieldDescription, FieldLabel } from "@/components/ui/field"
-import { Input } from "@/components/ui/input"
+import History from "./pages/History";
+
 
 function App() {
   return (
@@ -10,6 +10,7 @@ function App() {
       <Routes>
         <Route path="/" element={<AuthPage />} />
         <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/history" element={<History />} />
       </Routes>
     </div>
   )
