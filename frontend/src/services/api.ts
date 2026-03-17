@@ -35,4 +35,17 @@ export const uploadCSV = async (file: File) => {
     return response
 }
 
+
+export const getHistory = async () => {
+    const token = localStorage.getItem("token")
+    const response = await api.get('/csv/history', {
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    })
+
+    return response
+}
+
+
 export default api;
