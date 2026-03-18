@@ -13,9 +13,11 @@ export default function Dashboard() {
 
     const handleUpload = async () => {
         if (!file) return
+        setLoading(true)
         const result = await uploadCSV(file)
         console.log(result)
         setResult(result.data)
+        setLoading(false)
     }
 
     return (
@@ -24,9 +26,13 @@ export default function Dashboard() {
                 <FieldLabel htmlFor="picture">Folder</FieldLabel>
                 <Input id="picture" type="file" onChange={(e) => setFile(e.target.files?.[0] ?? null)} />  {/* hata vermemesi icin ?. ve ?? kullandik */}
                 <FieldDescription>Select a picture to upload.</FieldDescription>
-                <Button className="bg-blue-500 hover:bg-blue-600" onClick={handleUpload}>
-                    <BrainCircuit size={28} />
-                    Start Analysis
+                <Button className="bg-blue-500 hover:bg-blue-600" onClick={handleUpload} disabled={loading}>
+                    {loading ? 'Analiz Ediliyor' : (
+                        <>
+                            <BrainCircuit size={28} />
+                            Start Analysis
+                        </>
+                    )}
                 </Button>
 
             </Field>
