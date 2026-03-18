@@ -186,12 +186,14 @@ export default function AuthPage() {
                                             required
                                             onChange={(e) => setEmail(e.target.value)}
                                         />
+                                        {errors.email && <p className="text-red-500">{errors.email}</p>}
                                     </div>
                                     <div className="grid gap-2">
                                         <div className="flex items-center">
                                             <Label htmlFor="password">Password</Label>
                                         </div>
                                         <Input id="password" type="password" required placeholder="**********" onChange={(e) => setPassword(e.target.value)} />
+                                        {errors.password && <p className="text-red-500">{errors.password}</p>}
                                     </div>
                                 </div>
                             </form>
