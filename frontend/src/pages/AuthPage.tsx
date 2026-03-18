@@ -24,16 +24,38 @@ import { useNavigate } from "react-router";
 
 import { loginUser, registerUser } from "@/services/api"
 
+import { z } from 'zod'
+const authSchema = z.object({
+    email: z.email('Geçerli bir email girin'),
+    password: z.string().min(6, 'Şifre en az 6 karakter olmalı')
+})
+
 
 export default function AuthPage() {
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [token, setToken] = useState('');
+    const [errors, setErrors] = useState<{ email?: string, password?: string }>({});
 
     const navigate = useNavigate();
 
     const handleLogin = async () => {
+
+        const validation = authSchema.safeParse({ email, password });   // safeParse() ile veriler kontrol edilir, hata oldugunda bize bir obje doner
+        if (!validation.success) {
+            const fieldErrors: { email?: string, password?: string } = {}
+            validation.error.issues.forEach(err => {
+                if (err.path[0] === 'email') {
+                    fieldErrors.email = err.message
+                }
+                else if (err.path[0] === 'password') {
+                    fieldErrors.password = err.message
+                }
+            })
+            setErrors(fieldErrors)
+            return                      // return olmazsa, hata olsa bile asagidaki kisim da calisirdi !
+        }
 
         const response = await loginUser(email, password)
         console.log(response)
@@ -85,6 +107,7 @@ export default function AuthPage() {
                                             required
                                             onChange={(e) => setEmail(e.target.value)}
                                         />
+                                        {errors.email && <p className="text-red-500">{errors.email}</p>}
                                     </div>
                                     <div className="grid gap-2">
                                         <div className="flex items-center">
@@ -97,6 +120,7 @@ export default function AuthPage() {
                                             </a> */}
                                         </div>
                                         <Input id="password" type="password" required placeholder="**********" onChange={(e) => setPassword(e.target.value)} />
+                                        {errors.password && <p className="text-red-500">{errors.password}</p>}
                                     </div>
                                 </div>
                             </form>
