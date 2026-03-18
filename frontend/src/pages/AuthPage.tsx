@@ -25,6 +25,7 @@ import { useNavigate } from "react-router";
 import { loginUser, registerUser } from "@/services/api"
 
 import { z } from 'zod'
+
 const authSchema = z.object({
     email: z.email('Geçerli bir email girin'),
     password: z.string().min(6, 'Şifre en az 6 karakter olmalı')
@@ -67,6 +68,23 @@ export default function AuthPage() {
 
 
     const handleRegister = async () => {
+
+        const registerValidation = authSchema.safeParse({ email, password })
+        if (!registerValidation.success) {
+            // console.log(registerValidation)
+            console.log(registerValidation.error)
+            const fieldErrors: { email?: string, password?: string } = {}
+            registerValidation.error.issues.forEach((item) => {
+                if (item.path[0] === 'email') {
+                    fieldErrors.email = item.message
+                }
+                else if (item.path[0] === 'password') {
+                    fieldErrors.password = item.message
+                }
+            })
+            setErrors(fieldErrors)
+            return
+        }
 
         const response = await registerUser(email, password)
         console.log(response)
