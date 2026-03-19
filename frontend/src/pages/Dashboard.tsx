@@ -12,14 +12,24 @@ export default function Dashboard() {
     const [file, setFile] = useState<File | null>(null)
     const [loading, setLoading] = useState(false)
     const [result, setResult] = useState<any>(null)
+    const [error, setError] = useState<string>("")
 
     const handleUpload = async () => {
-        if (!file) return
-        setLoading(true)
-        const result = await uploadCSV(file)
-        console.log(result)
-        setResult(result.data)
-        setLoading(false)
+
+        try {
+            setError("")        // try icinde basa koyduk cunku yeni istek başladığında önceki hatayı temizlemeli !
+            if (!file) return
+            setLoading(true)
+            const result = await uploadCSV(file)
+            console.log(result)
+            setResult(result.data)
+        } catch (error) {
+            console.log(error)
+            setError(error instanceof Error ? error.message : "Bir hata oluştu")    // error instanceof Error ==> gelen hata bir Error nesnesi mi kontrol eder
+        } finally {
+            setLoading(false)
+
+        }
     }
 
     return (
@@ -53,6 +63,10 @@ export default function Dashboard() {
                     </Button>
                 </CardContent>
             </Card>
+
+            {error && (
+                <p className="text-sm text-red-500 bg-red-50 p-3 rounded-md">{error}</p>
+            )}
 
             {result && (
                 <Card>
