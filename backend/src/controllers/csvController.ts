@@ -66,3 +66,26 @@ export const getHistory = async (req: Request, res: Response) => {
     }
 
 }
+
+
+export const deleteHistory = async (req: Request, res: Response) => {
+
+    try {
+
+        if (req.params.id && req.userId) {
+
+            const record = await Analysis.findOne({ _id: req.params.id, user: req.userId })
+            if (!record) {
+                return res.status(404).json({ message: "Kayıt bulunamadı" })
+            }
+
+            const deletedObject = await record.deleteOne()
+
+            return res.status(200).json({ message: "Silme islemi basarili", deletedObject })
+        }
+
+    } catch (error) {
+        console.log(error)
+        return res.status(500).json({ message: "Server hatasi" })
+    }
+}

@@ -1,5 +1,6 @@
 import express from 'express'
 import dotenv from "dotenv";
+import cors from 'cors'
 import { connectDB } from "./config/db"
 import authRoutes from "./routes/authRoutes"
 import csvRoutes from "./routes/csvRoutes"
@@ -7,6 +8,9 @@ import csvRoutes from "./routes/csvRoutes"
 dotenv.config()
 const app = express();
 app.use(express.json());
+app.use(cors({
+    origin: 'http://localhost:5173'
+}));
 connectDB();
 
 
