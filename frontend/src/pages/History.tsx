@@ -4,12 +4,25 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { intersection } from "zod"
+import { Trash2 } from 'lucide-react'
+import { deleteHistory } from "../services/api"
 
 export default function History() {
 
     const [history, setHistory] = useState<any[]>([])
     const [expanded, setExpanded] = useState<string | null>(null)
     const [error, setError] = useState<string>("")
+
+    const handleDelete = async (id: string) => {
+
+        try {
+            await deleteHistory(id)
+            setHistory(history.filter((item) => item._id != id))
+        } catch (error) {
+            console.log(error)
+            setError(error instanceof Error ? error.message : 'Bir hata oluştu')
+        }
+    }
 
     useEffect(() => {
 
@@ -41,9 +54,14 @@ export default function History() {
 
                         <CardTitle className="flex justify-between items-center">
                             <span>{item.fileName}</span>
-                            <span className="text-sm text-muted-foreground font-normal">
-                                {new Date(item.createdAt).toLocaleDateString('tr-TR')}
-                            </span>
+                            <div className="flex items-center gap-2">
+                                <span className="text-sm text-muted-foreground font-normal">
+                                    {new Date(item.createdAt).toLocaleDateString('tr-TR')}
+                                </span>
+                                <Button variant="ghost" size="icon" onClick={() => handleDelete(item._id)}>
+                                    <Trash2 className="h-4 w-4 text-red-500" />
+                                </Button>
+                            </div>
                         </CardTitle>
                     </CardHeader>
                     <CardContent className="flex flex-col gap-3">

@@ -48,4 +48,17 @@ export const getHistory = async () => {
 }
 
 
+export const deleteHistory = async (id: string) => {
+
+    const token = localStorage.getItem("token")
+    const response = await api.delete(`/csv/history/${id}`, {
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    })
+
+    return response
+}
+
+
 export default api;
