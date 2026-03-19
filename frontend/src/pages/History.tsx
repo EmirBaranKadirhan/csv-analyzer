@@ -26,6 +26,7 @@ export default function History() {
             {history.map((item: any) => (
                 <Card key={item._id}>
                     <CardHeader>
+
                         <CardTitle className="flex justify-between items-center">
                             <span>{item.fileName}</span>
                             <span className="text-sm text-muted-foreground font-normal">
