@@ -54,7 +54,7 @@ export const getHistory = async (req: Request, res: Response) => {
 
     try {
         if (req.userId) {
-            const data = await Analysis.find({ user: req.userId })
+            const data = await Analysis.find({ user: req.userId }).sort({ createdAt: -1 })
 
             return res.status(200).json({ message: "Gecmis kayitlar basariyla getirildi", data })
         }
