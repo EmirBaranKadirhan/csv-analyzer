@@ -3,19 +3,28 @@ import { getHistory } from "../services/api"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
+import { intersection } from "zod"
 
 export default function History() {
 
     const [history, setHistory] = useState<any[]>([])
     const [expanded, setExpanded] = useState<string | null>(null)
+    const [error, setError] = useState<string>("")
 
     useEffect(() => {
 
         const fetchHistory = async () => {
 
-            const response = await getHistory()
-            console.log(response.data)
-            setHistory(response.data.data)
+            try {
+                setError('')
+                const response = await getHistory()
+                console.log(response.data)
+                setHistory(response.data.data)
+            } catch (error) {
+                console.log(error)
+                setError(error instanceof Error ? error.message : 'Bir hata oluştu')
+            }
+
         }
         fetchHistory()
 
@@ -23,6 +32,9 @@ export default function History() {
 
     return (
         <div className="max-w-3xl mx-auto p-6 flex flex-col gap-4">
+            {error && (
+                <p className="text-sm text-red-500 bg-red-50 p-3 rounded-md">{error}</p>
+            )}
             {history.map((item: any) => (
                 <Card key={item._id}>
                     <CardHeader>
