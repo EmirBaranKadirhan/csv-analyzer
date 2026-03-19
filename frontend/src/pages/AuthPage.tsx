@@ -38,65 +38,82 @@ export default function AuthPage() {
     const [password, setPassword] = useState('');
     const [token, setToken] = useState('');
     const [errors, setErrors] = useState<{ email?: string, password?: string }>({});
+    const [apiError, setApiError] = useState<string>("")
 
     const navigate = useNavigate();
 
     const handleLogin = async () => {
 
-        const validation = authSchema.safeParse({ email, password });   // safeParse() ile veriler kontrol edilir, hata oldugunda bize bir obje doner
-        if (!validation.success) {
-            const fieldErrors: { email?: string, password?: string } = {}
-            validation.error.issues.forEach(err => {
-                if (err.path[0] === 'email') {
-                    fieldErrors.email = err.message
-                }
-                else if (err.path[0] === 'password') {
-                    fieldErrors.password = err.message
-                }
-            })
-            setErrors(fieldErrors)
-            return                      // return olmazsa, hata olsa bile asagidaki kisim da calisirdi !
-        }
+        try {
+            setApiError("")
+            const validation = authSchema.safeParse({ email, password });   // safeParse() ile veriler kontrol edilir, hata oldugunda bize bir obje doner
+            if (!validation.success) {
+                const fieldErrors: { email?: string, password?: string } = {}
+                validation.error.issues.forEach(err => {
+                    if (err.path[0] === 'email') {
+                        fieldErrors.email = err.message
+                    }
+                    else if (err.path[0] === 'password') {
+                        fieldErrors.password = err.message
+                    }
+                })
+                setErrors(fieldErrors)
+                return                      // return olmazsa, hata olsa bile asagidaki kisim da calisirdi !
+            }
 
-        const response = await loginUser(email, password)
-        console.log(response)
-        const { token } = response.data
-        setToken(token)
-        localStorage.setItem('token', token)    // sayfa yenilendiginde gitmesin 
-        navigate('/dashboard')
+            const response = await loginUser(email, password)
+            console.log(response)
+            const { token } = response.data
+            setToken(token)
+            localStorage.setItem('token', token)    // sayfa yenilendiginde gitmesin 
+            navigate('/dashboard')
+
+        } catch (error) {
+
+            console.log(error)
+            setApiError(error instanceof Error ? error.message : "Bir hata oluştu")
+
+        }
     }
 
 
     const handleRegister = async () => {
 
-        const registerValidation = authSchema.safeParse({ email, password })
-        if (!registerValidation.success) {
-            // console.log(registerValidation)
-            console.log(registerValidation.error)
-            const fieldErrors: { email?: string, password?: string } = {}
-            registerValidation.error.issues.forEach((item) => {
-                if (item.path[0] === 'email') {
-                    fieldErrors.email = item.message
-                }
-                else if (item.path[0] === 'password') {
-                    fieldErrors.password = item.message
-                }
-            })
-            setErrors(fieldErrors)
-            return
+        try {
+
+            setApiError("")
+            const registerValidation = authSchema.safeParse({ email, password })
+            if (!registerValidation.success) {
+                // console.log(registerValidation)
+                console.log(registerValidation.error)
+                const fieldErrors: { email?: string, password?: string } = {}
+                registerValidation.error.issues.forEach((item) => {
+                    if (item.path[0] === 'email') {
+                        fieldErrors.email = item.message
+                    }
+                    else if (item.path[0] === 'password') {
+                        fieldErrors.password = item.message
+                    }
+                })
+                setErrors(fieldErrors)
+                return
+            }
+
+            const response = await registerUser(email, password)
+            console.log(response)
+            const { token } = response.data
+            setToken(token)
+            localStorage.setItem('token', token)
+        } catch (error) {
+            console.log(error)
+            setApiError(error instanceof Error ? error.message : "Bir hata oluştu")
+
         }
-
-        const response = await registerUser(email, password)
-        console.log(response)
-        const { token } = response.data
-        setToken(token)
-        localStorage.setItem('token', token)
-
     }
 
     return (
 
-        <div>
+        <div className="min-h-screen flex items-center justify-center">
             <Tabs defaultValue="login" className="w-[400px]">
                 <TabsList>
                     <TabsTrigger value="login">LOGIN</TabsTrigger>
@@ -150,6 +167,12 @@ export default function AuthPage() {
                             {/* <Button variant="outline" className="w-full">
                                 Login with Google
                             </Button> */}
+
+                            {apiError && (
+                                <p className="text-sm text-red-500 bg-red-50 p-3 rounded-md w-full text-center">
+                                    {apiError}
+                                </p>
+                            )}
                         </CardFooter>
                     </Card>
                 </TabsContent>
@@ -205,6 +228,12 @@ export default function AuthPage() {
                             {/* <Button variant="outline" className="w-full">
                                 Sign up with Google
                             </Button> */}
+
+                            {apiError && (
+                                <p className="text-sm text-red-500 bg-red-50 p-3 rounded-md w-full text-center">
+                                    {apiError}
+                                </p>
+                            )}
                         </CardFooter>
                     </Card>
                 </TabsContent>
