@@ -1,9 +1,12 @@
 import axios from 'axios';
 
-const api = axios.create({
-    baseURL: 'http://localhost:5000/api',
-});
+// const api = axios.create({
+//     baseURL: 'http://localhost:5000/api',
+// });
 
+const api = axios.create({
+    baseURL: 'https://csv-analyzer-backend-6rco.onrender.com/api',
+});
 
 export const loginUser = async (email: string, password: string) => {
 
