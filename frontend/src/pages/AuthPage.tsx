@@ -36,7 +36,6 @@ export default function AuthPage() {
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [token, setToken] = useState('');
     const [errors, setErrors] = useState<{ email?: string, password?: string }>({});
     const [apiError, setApiError] = useState<string>("")
     const [activeTab, setActiveTab] = useState("login")
@@ -65,7 +64,6 @@ export default function AuthPage() {
             const response = await loginUser(email, password)
             console.log(response)
             const { token } = response.data
-            setToken(token)
             localStorage.setItem('token', token)    // sayfa yenilendiginde gitmesin 
             navigate('/dashboard')
 
@@ -103,7 +101,6 @@ export default function AuthPage() {
             const response = await registerUser(email, password)
             console.log(response)
             const { token } = response.data
-            setToken(token)
             localStorage.setItem('token', token)
         } catch (error) {
             console.log(error)
