@@ -102,6 +102,7 @@ export default function AuthPage() {
             console.log(response)
             const { token } = response.data
             localStorage.setItem('token', token)
+            navigate('/dashboard')
         } catch (error) {
             console.log(error)
             setApiError(error instanceof Error ? error.message : "Bir hata oluştu")
