@@ -39,6 +39,7 @@ export default function AuthPage() {
     const [token, setToken] = useState('');
     const [errors, setErrors] = useState<{ email?: string, password?: string }>({});
     const [apiError, setApiError] = useState<string>("")
+    const [activeTab, setActiveTab] = useState("login")
 
     const navigate = useNavigate();
 
@@ -114,7 +115,7 @@ export default function AuthPage() {
     return (
 
         <div className="min-h-screen flex items-center justify-center">
-            <Tabs defaultValue="login" className="w-[400px]">
+            <Tabs value={activeTab} onValueChange={setActiveTab} className="w-[400px]">
                 <TabsList>
                     <TabsTrigger value="login">LOGIN</TabsTrigger>
                     <TabsTrigger value="register">REGISTER</TabsTrigger>
@@ -127,7 +128,9 @@ export default function AuthPage() {
                                 Enter your email below to login to your account
                             </CardDescription>
                             <CardAction>
-                                <Button variant="link">Sign Up</Button>
+                                <Button variant="link" onClick={() => setActiveTab("register")}>
+                                    Sign Up
+                                </Button>
                             </CardAction>
                         </CardHeader>
                         <CardContent>
@@ -185,7 +188,9 @@ export default function AuthPage() {
                                 Enter your information below to create your account
                             </CardDescription>
                             <CardAction>
-                                <Button variant="link">Login</Button>
+                                <Button variant="link" onClick={() => setActiveTab("login")}>
+                                    Login
+                                </Button>
                             </CardAction>
                         </CardHeader>
                         <CardContent>
